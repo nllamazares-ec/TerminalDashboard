@@ -1,0 +1,12 @@
+{
+  "podio": { "gana": "trofeo", "otro": "piano", "ultimo": "piso" },
+  "animaciones": {
+    "trofeo":  {"titulo": "levanta la copa", "cuadros": 7, "ms": 420, "pausa": 1400, "alto": 96},
+    "piano":   {"titulo": "toca el teclado", "cuadros": 6, "ms": 380, "pausa": 900, "alto": 96},
+    "caminar": {"titulo": "camina", "cuadros": 4, "ms": 170, "alto": 96},
+    "mate":    {"titulo": "toma mate", "cuadros": 9, "ms": 480, "pausa": 1200, "alto": 96},
+    "piso":    {"titulo": "queda tirado en el piso", "cuadros": 6, "ms": 450, "pausa": 1800, "alto": 96},
+    "posa":    {"titulo": "posa", "cuadros": 9, "ms": 1100, "alto": 96},
+    "compu":   {"titulo": "usa la compu", "cuadros": 1, "ms": 700, "alto": 96}
+  }
+}
