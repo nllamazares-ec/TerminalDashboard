@@ -1,0 +1,14 @@
+{
+  "podio": { "gana": "trofeo", "otro": "moto" },
+  "animaciones": {
+    "trofeo":  {"titulo": "levanta la copa", "cuadros": 6, "ms": 420, "pausa": 1400, "alto": 96},
+    "moto":    {"titulo": "anda en moto", "cuadros": 8, "ms": 130, "alto": 96},
+    "caminar": {"titulo": "camina", "cuadros": 7, "ms": 140, "alto": 96},
+    "correr":  {"titulo": "corre", "cuadros": 8, "ms": 100, "alto": 96},
+    "mate":    {"titulo": "toma mate", "cuadros": 6, "ms": 520, "pausa": 1000, "alto": 96},
+    "leer":    {"titulo": "lee el mapa", "cuadros": 2, "ms": 900, "alto": 96},
+    "compu":   {"titulo": "usa la compu", "cuadros": 2, "ms": 700, "alto": 96},
+    "espera":  {"titulo": "espera", "cuadros": 4, "ms": 600, "alto": 96},
+    "posa":    {"titulo": "posa", "cuadros": 8, "ms": 1100, "alto": 96}
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "imagen": "atlas.png",
+  "poses": {"parado": [418, 244, 52, 96], "festejo": [658, 4, 103, 115], "sentado": [474, 244, 69, 79]},
+  "podio": {"gana": "festejo", "otro": "teclado", "ultimo": "derrota"},
+  "animaciones": {
+    "festejo": {"titulo": "festeja con un solo de guitarra", "ms": 380, "pausa": 1600, "alto": 96, "w": 116, "h": 109, "cuadros": [[765, 4], [885, 4], [4, 131], [124, 131], [244, 131], [364, 131], [484, 131]]},
+    "teclado": {"titulo": "toca el teclado", "ms": 380, "pausa": 900, "alto": 96, "w": 105, "h": 123, "cuadros": [[4, 4], [113, 4], [222, 4], [331, 4], [440, 4], [549, 4]]},
+    "derrota": {"titulo": "queda tirado en el piso", "ms": 450, "pausa": 2000, "alto": 96, "w": 134, "h": 101, "cuadros": [[604, 131], [742, 131], [880, 131], [4, 244], [142, 244], [280, 244]]}
+  }
+}

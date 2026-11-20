@@ -1,0 +1,10 @@
+{
+  "imagen": "atlas.png",
+  "poses": {"parado": [891, 4, 70, 96], "caminando": [4, 113, 62, 96], "festejo": [4, 4, 99, 105], "sentado": [512, 213, 76, 91]},
+  "podio": {"gana": "invento", "otro": "mezcla", "ultimo": "explosion"},
+  "animaciones": {
+    "invento": {"titulo": "su invento funciona", "ms": 330, "pausa": 1400, "alto": 96, "w": 108, "h": 105, "cuadros": [[107, 4], [219, 4], [331, 4], [443, 4], [555, 4], [667, 4], [779, 4]]},
+    "mezcla": {"titulo": "mezcla dos frascos", "ms": 380, "pausa": 1200, "alto": 96, "w": 98, "h": 95, "cuadros": [[70, 113], [172, 113], [274, 113], [376, 113], [478, 113], [580, 113]]},
+    "explosion": {"titulo": "le explota el experimento", "ms": 420, "pausa": 2000, "alto": 96, "w": 123, "h": 95, "cuadros": [[682, 113], [809, 113], [4, 213], [131, 213], [258, 213], [385, 213]]}
+  }
+}
