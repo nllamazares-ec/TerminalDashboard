@@ -125,6 +125,7 @@
       const m = medir(img, frames[0]);
       anims[nombre] = {
         nombre, titulo: a.titulo || nombre, cuadros: frames.length, ms: a.ms || 300, pausa: a.pausa || a.ms || 300,
+        pausaEn: a.pausaEn ?? frames.length - 1,       // cuadro donde se detiene (el clímax); por defecto, el último
         alto: a.alto || m.h, mascota: !!a.mascota, w: a.w, h: a.h, talon: m.talon || 0, frames, img,
       };
     }
@@ -167,7 +168,7 @@
       `<image href="${esc(c.src)}" width="${c.aw}" height="${c.ah}"/></svg>`;
   }
   // Atributos para que el reloj de animación cambie de cuadro: "src x y|src x y|…"
-  const framesAttr = (an, k) => ` data-frames="${esc(an.frames.map(f => `${f.src} ${f.x} ${f.y}`).join("|"))}" data-ms="${an.ms}" data-pausa="${an.pausa}"${k ? ` data-k="${k}"` : ""}`;
+  const framesAttr = (an, k) => ` data-frames="${esc(an.frames.map(f => `${f.src} ${f.x} ${f.y}`).join("|"))}" data-ms="${an.ms}" data-pausa="${an.pausa}" data-pi="${an.pausaEn ?? an.frames.length - 1}"${k ? ` data-k="${k}"` : ""}`;
 
   // Animaciones: avatars/sprites/<id>/animaciones.json + una carpeta por animación con 1.png, 2.png…
   const ANIMS = new Map();         // id → { podio: { gana, otro }, anims: { nombre → {...} } }
@@ -188,7 +189,8 @@
         const fr = el.dataset.frames.split("|");
         const i = (+(el.dataset.i || 0) + 1) % fr.length;
         el.dataset.i = i;
-        el.dataset.t = now + (i === fr.length - 1 ? +el.dataset.pausa : +el.dataset.ms);
+        const pi = el.dataset.pi !== undefined ? +el.dataset.pi : fr.length - 1;
+        el.dataset.t = now + (i === pi ? +el.dataset.pausa : +el.dataset.ms);
         const [src, x, y] = fr[i].split(" ");
         if (el.tagName.toLowerCase() === "svg") {            // podio: se mueve el viewBox sobre el atlas
           const vb = el.viewBox.baseVal;
@@ -324,6 +326,12 @@
     const [rows, pal] = maps[nombre] || maps.estrella;
     const w = rows[0].length + 2, h = rows.length + 2;
     return `<svg class="ico" viewBox="0 0 ${w} ${h}" width="${Math.round(alto * w / h)}" height="${alto}" shape-rendering="crispEdges" aria-hidden="true">${pixelMap(rows, pal, 1, 1, 1, "ico")}</svg>`;
+  }
+
+  // Dibujo de pixel art genérico (filas de letras + paleta), con contorno: lo usan las medallas.
+  function pixelArte(rows, pal, alto = 16, cls = "ico") {
+    const w = rows[0].length + 2, h = rows.length + 2;
+    return `<svg class="${cls}" viewBox="0 0 ${w} ${h}" width="${Math.round(alto * w / h)}" height="${alto}" shape-rendering="crispEdges" aria-hidden="true">${pixelMap(rows, pal, 1, 1, 1, "")}</svg>`;
   }
 
   // ───────────────────────── podio ─────────────────────────
@@ -463,5 +471,5 @@
   }
 
   animar();
-  global.Avatares = { cargar, avatar, spriteDe, mascotaDe, animaciones, posesDe, podioSVG, rachaSVG, nivelRacha, iconoSVG, POSES };
+  global.Avatares = { cargar, avatar, spriteDe, mascotaDe, animaciones, posesDe, podioSVG, rachaSVG, nivelRacha, iconoSVG, pixelArte, POSES };
 })(typeof window !== "undefined" ? window : globalThis);

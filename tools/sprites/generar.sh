@@ -3,7 +3,7 @@
 # Uso (desde esta carpeta):  sh generar.sh            → escribe en salida/
 # Requiere Python 3 con pillow, numpy y scipy:  pip install pillow numpy scipy
 # Después copiá salida/atlas/<personaje>/ (atlas.png + atlas.json) a avatars/sprites/<personaje>/,
-# salida/nico_dino.png a avatars/mascotas/dino.png y subí AVATARES_VERSION en avatars/players.js.
+# salida/nico_dino.png a avatars/mascotas/dino.png, salida/medallas.png a avatars/medallas.png y subí AVATARES_VERSION en avatars/players.js.
 set -e
 export ALTO=96          # alto en píxeles reales del personaje parado
 mkdir -p salida
@@ -14,4 +14,5 @@ python nico.py  hojas/nico.png  salida/nico
 for p in andy dante fran; do python pixelize.py salida/$p; done
 python pixelize.py salida/nico salida/nico_dino.png
 for p in andy dante fran nico; do python empaquetar.py salida/$p salida/atlas/$p; done
+python medallas.py hojas/medallas.png salida/medallas.png
 echo "listo: salida/"

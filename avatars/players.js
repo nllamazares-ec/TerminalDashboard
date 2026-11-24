@@ -39,7 +39,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Cambiá este número cada vez que actualices imágenes, así todos ven las nuevas sin limpiar la caché.
-window.AVATARES_VERSION = "16";
+window.AVATARES_VERSION = "20";
 
 // Personajes de reserva para jugadores que no figuran en AVATARES (siempre el mismo para el mismo
 // nombre). Vacío: un jugador sin personaje propio se muestra sin dibujo hasta que se le asigne uno.

@@ -58,6 +58,16 @@
   .card .lbl { padding: 6px 10px; font-size: 12px; color: var(--mid); display: flex; justify-content: space-between; gap: 6px; }
   .card[aria-pressed="true"] .lbl { color: var(--acc); }
   .card .lbl small { color: var(--dim); font-size: 11px; }
+  /* medallero */
+  .medallero { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+  .med { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--tile); }
+  .med .medalla { flex: none; image-rendering: pixelated; line-height: 0; }
+  .med.bloq { opacity: .6; }
+  .med.bloq .medalla { filter: grayscale(1); opacity: .5; }
+  .med b { display: block; font-weight: 500; color: var(--fg); font-size: 12.5px; }
+  .med.bloq b { color: var(--mid); }
+  .med small { display: block; color: var(--dim); font-size: 11px; line-height: 1.4; }
+  .med .veces { margin-left: auto; color: var(--acc); font-size: 12px; font-variant-numeric: tabular-nums; }
 
   .scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
@@ -117,6 +127,11 @@
     </section>
 
     <section>
+      <h2><span>medallas</span><span id="med-count"></span></h2>
+      <div class="medallero" id="medallero"></div>
+    </section>
+
+    <section>
       <h2><span>últimas partidas</span><span>10 más recientes</span></h2>
       <div class="scroll"><table id="games"></table></div>
     </section>
@@ -130,8 +145,9 @@
   </div>
 </div>
 
-<script src="avatars/engine.js?v=2"></script>
-<script src="avatars/players.js?v=2"></script>
+<script src="avatars/engine.js?v=4"></script>
+<script src="avatars/players.js?v=4"></script>
+<script src="avatars/logros.js?v=4"></script>
 <script src="config.js"></script>
 <script>
 const { SUPABASE_URL, SUPABASE_KEY, TZ } = window.CONFIG;
@@ -210,6 +226,14 @@ function render(scores, players) {
     row("crucigramas 100%", st.perfect.length) +
     row("más rápido 100%", st.fastest ? mmss(st.fastest.elapsed) : "—");
 
+  // medallero: todas las medallas, las ganadas a color (con cuántas veces y desde cuándo) y el resto en gris
+  const LG = Logros.calcular(scores, todayAR()), mias = LG.de[nombre] || {};
+  $("med-count").textContent = `${Object.keys(mias).length} de ${Logros.DEFS.length}`;
+  $("medallero").innerHTML = Logros.DEFS.map(d => {
+    const r = mias[d.id];
+    return `<div class="med${r ? "" : " bloq"}">${Logros.medalla(d.id, 32, !r)}<div><b>${esc(d.nombre)}</b><small>${r ? `${d.nivel} · desde ${shortDate(r.primera)}` : esc(d.desc)}</small></div>${r && r.veces > 1 ? `<span class="veces">×${r.veces}</span>` : ""}</div>`;
+  }).join("");
+
   $("games").innerHTML = `<thead><tr><th>fecha</th><th class="num">pts</th><th class="num">palabras</th><th class="num">tiempo</th><th class="num">puesto</th></tr></thead><tbody>` +
     (st.mine.slice(0, 10).map(s => {
       const p = st.place(s.play_date, nombre);
@@ -233,7 +257,7 @@ $("cards").addEventListener("click", e => {
     const [scores, pl] = await Promise.all([api("public_scores", "&order=play_date.asc"), api("public_players")]);
     const players = pl.map(p => p.name);
     if (!players.includes(nombre) && !scores.some(s => s.name === nombre)) throw new Error(`No hay ningún jugador llamado "${nombre}".`);
-    await AV.cargar([...players, nombre].map(AV.spriteDe));
+    await Promise.all([AV.cargar([...players, nombre].map(AV.spriteDe)), Logros.cargar()]);
     render(scores, players);
   } catch (e) {
     $("err").textContent = "error: " + e.message; $("err").style.display = "block";

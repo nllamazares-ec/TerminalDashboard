@@ -57,9 +57,13 @@ def empaquetar(src, out):
             nombre = clave[1]
             a = man["animaciones"][nombre]
             if nombre not in anims:
-                anims[nombre] = {k: a[k] for k in ("titulo", "ms", "pausa", "alto", "mascota") if k in a}
+                anims[nombre] = {k: a[k] for k in ("titulo", "ms", "pausa", "pausaEn", "alto", "mascota") if k in a}
                 anims[nombre].update(w=im.width, h=im.height, cuadros=[None] * a["cuadros"])
             anims[nombre]["cuadros"][clave[2]] = [x, y]
+    # "orden": secuencia de reproducción (puede repetir cuadros, p. ej. ida y vuelta) sin duplicar imágenes
+    for nombre, a in man.get("animaciones", {}).items():
+        if "orden" in a and nombre in anims:
+            anims[nombre]["cuadros"] = [anims[nombre]["cuadros"][i] for i in a["orden"]]
 
     os.makedirs(out, exist_ok=True)
     atlas.save(os.path.join(out, "atlas.png"), optimize=True)
