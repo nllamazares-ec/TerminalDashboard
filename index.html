@@ -252,9 +252,9 @@
   </div>
 </div>
 
-<script src="avatars/engine.js?v=4"></script>
-<script src="avatars/players.js?v=4"></script>
-<script src="avatars/logros.js?v=4"></script>
+<script src="avatars/engine.js?v=5"></script>
+<script src="avatars/players.js?v=5"></script>
+<script src="avatars/logros.js?v=5"></script>
 <script src="config.js"></script>
 <script>
 // ── configuración: URL del proyecto y publishable/anon key de Supabase (solo lectura de las vistas) ──
@@ -315,7 +315,10 @@ const n = v => v.toLocaleString("es-AR");
 const mmss = s => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
 // Días que suman para semana/mes/total: ver Logros.diasValidos (avatars/logros.js).
-const countingDays = () => Logros.diasValidos(state.scores, state.players);
+// si el navegador todavía tiene un logros.js viejo en caché, se suman todos los días en vez de romper la página
+const countingDays = () => Logros.diasValidos
+  ? Logros.diasValidos(state.scores, state.players)
+  : new Set(state.scores.map(s => s.play_date));
 
 function aggregate(from, to) {
   const valid = countingDays();
