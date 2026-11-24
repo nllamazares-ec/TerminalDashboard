@@ -1,0 +1,10 @@
+{
+  "imagen": "atlas.png",
+  "poses": {"parado": [315, 133, 46, 96], "caminando": [263, 133, 48, 98], "festejo": [160, 133, 99, 117], "sentado": [864, 358, 72, 75]},
+  "podio": {"gana": "festejo", "otro": "moto", "ultimo": "derrota"},
+  "animaciones": {
+    "festejo": {"titulo": "festeja con un trompo en la moto", "ms": 380, "pausa": 1600, "alto": 96, "w": 152, "h": 125, "cuadros": [[4, 4], [160, 4], [316, 4], [472, 4], [628, 4], [784, 4], [4, 133]]},
+    "moto": {"titulo": "anda en moto y hace un caballito", "ms": 160, "pausa": 1400, "alto": 96, "w": 127, "h": 92, "cuadros": [[365, 133], [496, 133], [627, 133], [758, 133], [889, 133], [4, 262], [135, 262], [266, 262]]},
+    "derrota": {"titulo": "se le pincha la rueda y sale volando", "ms": 380, "pausa": 2200, "alto": 96, "w": 211, "h": 92, "cuadros": [[397, 262], [612, 262], [4, 358], [219, 358], [434, 358], [649, 358]]}
+  }
+}

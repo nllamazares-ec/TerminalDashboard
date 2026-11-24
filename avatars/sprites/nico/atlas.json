@@ -1,0 +1,10 @@
+{
+  "imagen": "atlas.png",
+  "poses": {"parado": [907, 4, 44, 96], "festejo": [652, 126, 59, 89], "sentado": [715, 126, 55, 79]},
+  "podio": {"gana": "festejo", "otro": "dino", "ultimo": "derrota"},
+  "animaciones": {
+    "festejo": {"titulo": "festeja saltando con el dino", "ms": 380, "pausa": 1600, "alto": 96, "mascota": true, "w": 125, "h": 118, "cuadros": [[4, 4], [133, 4], [262, 4], [391, 4], [520, 4], [649, 4], [778, 4]]},
+    "dino": {"titulo": "juega a la pelota con el dino", "ms": 450, "pausa": 1600, "alto": 96, "mascota": true, "w": 109, "h": 76, "cuadros": [[774, 126], [887, 126], [4, 226], [117, 226], [230, 226], [343, 226]]},
+    "derrota": {"titulo": "queda tirado en el piso", "ms": 450, "pausa": 2000, "alto": 96, "w": 104, "h": 96, "cuadros": [[4, 126], [112, 126], [220, 126], [328, 126], [436, 126], [544, 126]]}
+  }
+}

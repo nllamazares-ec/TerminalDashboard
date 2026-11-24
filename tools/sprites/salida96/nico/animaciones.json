@@ -1,0 +1,17 @@
+{
+  "podio": { "gana": "trofeo", "otro": "dino", "ultimo": "derrota" },
+  "animaciones": {
+    "trofeo":  {"titulo": "levanta la copa", "cuadros": 7, "ms": 420, "pausa": 1400, "alto": 96},
+    "dino":    {"titulo": "juega con el dino", "cuadros": 4, "ms": 700, "pausa": 1600, "alto": 96, "mascota": true},
+    "derrota": {"titulo": "queda tirado en el piso", "cuadros": 6, "ms": 500, "pausa": 2000, "alto": 96},
+    "compu":   {"titulo": "usa la compu con el dino", "cuadros": 7, "ms": 450, "alto": 96, "mascota": true},
+    "caminar": {"titulo": "camina", "cuadros": 8, "ms": 130, "alto": 96},
+    "correr":  {"titulo": "corre", "cuadros": 8, "ms": 100, "alto": 96},
+    "saltar":  {"titulo": "salta", "cuadros": 9, "ms": 150, "pausa": 600, "alto": 96},
+    "caer":    {"titulo": "cae y aterriza", "cuadros": 6, "ms": 180, "pausa": 900, "alto": 96},
+    "objetos": {"titulo": "usa sus cosas", "cuadros": 5, "ms": 1200, "alto": 96},
+    "espera":  {"titulo": "espera", "cuadros": 4, "ms": 600, "alto": 96},
+    "girar":   {"titulo": "gira", "cuadros": 5, "ms": 400, "alto": 96},
+    "posa":    {"titulo": "posa", "cuadros": 9, "ms": 1100, "alto": 96}
+  }
+}

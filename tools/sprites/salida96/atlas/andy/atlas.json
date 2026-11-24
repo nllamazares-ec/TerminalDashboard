@@ -1,0 +1,14 @@
+{
+  "imagen": "atlas.png",
+  "poses": {"parado": [892, 241, 47, 94], "caminando": [175, 342, 47, 91], "festejo": [4, 4, 73, 129], "sentado": [226, 342, 57, 82]},
+  "podio": {"gana": "trofeo", "otro": "piano", "ultimo": "piso"},
+  "animaciones": {
+    "trofeo": {"titulo": "levanta la copa", "ms": 420, "pausa": 1400, "alto": 96, "w": 70, "h": 111, "cuadros": [[465, 4], [539, 4], [613, 4], [687, 4], [761, 4], [835, 4], [909, 4]]},
+    "piano": {"titulo": "toca el teclado", "ms": 380, "pausa": 900, "alto": 96, "w": 60, "h": 113, "cuadros": [[81, 4], [145, 4], [209, 4], [273, 4], [337, 4], [401, 4]]},
+    "caminar": {"titulo": "camina", "ms": 170, "alto": 96, "w": 53, "h": 94, "cuadros": [[943, 241], [4, 342], [61, 342], [118, 342]]},
+    "mate": {"titulo": "toma mate", "ms": 480, "pausa": 1200, "alto": 96, "w": 72, "h": 97, "cuadros": [[526, 137], [602, 137], [678, 137], [754, 137], [830, 137], [906, 137], [4, 241], [80, 241], [156, 241]]},
+    "piso": {"titulo": "queda tirado en el piso", "ms": 450, "pausa": 1800, "alto": 96, "w": 106, "h": 95, "cuadros": [[232, 241], [342, 241], [452, 241], [562, 241], [672, 241], [782, 241]]},
+    "posa": {"titulo": "posa", "ms": 1100, "alto": 96, "w": 54, "h": 100, "cuadros": [[4, 137], [62, 137], [120, 137], [178, 137], [236, 137], [294, 137], [352, 137], [410, 137], [468, 137]]},
+    "compu": {"titulo": "usa la compu", "ms": 700, "alto": 96, "w": 64, "h": 81, "cuadros": [[287, 342]]}
+  }
+}

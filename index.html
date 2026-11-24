@@ -88,8 +88,12 @@
   td.name { color: var(--fg); width: 1%; padding-right: 18px; }
   td.pts { color: var(--fg); font-weight: 500; }
   tr.p1 td.rank, tr.p1 td.pts { color: var(--acc); }
-  tr.p1 td.name::before { content: "▸ "; color: var(--acc); }
-  td.spark { width: 100%; min-width: 80px; }
+  tr.p1 .nm::before { content: "▸ "; color: var(--acc); }
+  tr.p1 .nm { color: var(--acc); }
+  .who { display: flex; align-items: center; gap: 10px; }
+  .who .avt { flex: none; }
+  tr.zero .avt { opacity: .45; }
+  td.spark { width: 100%; min-width: 40px; }
   .meter { height: 3px; background: var(--line-soft); border-radius: 2px; overflow: hidden; }
   .meter i { display: block; height: 100%; background: var(--mid); opacity: .55; border-radius: 2px; }
   tr.p1 .meter i { background: var(--acc); opacity: .9; }
@@ -116,6 +120,54 @@
   .err { display: none; margin-top: 20px; padding: 10px 12px; border: 1px solid #5a3a2a; border-radius: 6px; color: var(--warn); background: rgba(224,169,109,.05); white-space: pre-wrap; }
   footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--dim); font-size: 11.5px; }
   kbd { font: inherit; color: var(--mid); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; }
+
+  /* ── personajes (avatars/engine.js) ── */
+  .avt { position: relative; display: inline-block; flex: none; }
+  .avt img, .avt svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+  /* borde claro suave: separa los contornos negros (y el dino) del fondo oscuro */
+  .avt img, .avt .spr, .podio-svg image { filter: drop-shadow(0 0 1px rgba(214, 219, 226, .55)); image-rendering: pixelated; }
+  .avt .spr { position: absolute; left: 0; top: 0; display: block; background-repeat: no-repeat; }
+  a.pl { color: inherit; text-decoration: none; }
+  a.pl:hover .nm, a.pl:hover b, a.pl:hover > span { text-decoration: underline; text-underline-offset: 3px; }
+  .avt-pj { position: absolute; left: 0; top: 0; }
+  .avt img.mascota { image-rendering: pixelated; animation: hop 1.8s steps(2) infinite; }
+  .podio-svg .mascota { animation: hop 1.8s steps(2) infinite; transform-box: fill-box; }
+  /* entrada al podio: caen con un rebote (solo la primera vez que se dibuja) */
+  .podio-svg .entra { animation: entra .9s cubic-bezier(.3, .6, .4, 1) both; }
+  @keyframes entra { 0% { transform: translateY(-60px); opacity: 0 } 40% { opacity: 1 } 60% { transform: translateY(0) } 72% { transform: translateY(-4px) } 84% { transform: translateY(0) } 92% { transform: translateY(-1px) } 100% { transform: none } }
+  /* confeti sobre el 1.º */
+  .podio-svg .papel { animation: cae var(--d) linear var(--r) infinite; opacity: 0; }
+  @keyframes cae { 0% { transform: translate(0, -46px); opacity: 0 } 12% { opacity: 1 } 80% { opacity: 1 } 100% { transform: translate(var(--dx), 0); opacity: 0 } }
+  /* respiración de las poses quietas */
+  .avt-pj.quieto { transform-origin: 50% 100%; animation: respira 2.6s step-end infinite; }
+  @keyframes respira { 0% { transform: none } 50% { transform: scaleY(.98) } }
+  @keyframes hop { 50% { transform: translateY(-8%); } }
+  .avt-busto { overflow: hidden; background: #14181d; border: 1px solid var(--line); border-radius: 4px; }
+  .avt-busto img, .avt-busto svg { width: auto; height: auto; }
+  .podio { margin-top: 22px; }
+  .podio h2 { display: flex; align-items: center; gap: 10px; font-weight: 400; font-size: 11.5px; color: var(--dim); margin-bottom: 4px; }
+  .podio h2::after { content: ""; flex: 1; height: 1px; background: var(--line); order: 1; }
+  .podio h2 span:last-child { order: 2; }
+  .podio-scene { width: 100%; max-width: 870px; margin: 0 auto; }
+  .podio-svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .plabels { display: grid; grid-template-columns: 6fr 56fr 56fr 56fr 4fr 110fr 2fr; margin-top: 6px; font-size: 12px; text-align: center; }
+  .plabels div { display: flex; flex-direction: column; min-width: 0; }
+  .plabels b { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .plabels span { color: var(--mid); font-variant-numeric: tabular-nums; }
+  .plabels .first b, .plabels .first span { color: var(--acc); }
+  .racha { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-variant-numeric: tabular-nums; }
+  .racha svg, .ico { display: inline-block; vertical-align: -2px; }
+  .racha.r1, .racha.r2 { color: #ff9f5a; } .racha.r3 { color: #6fb0ff; } .racha.r4 { color: #b994ff; }
+  .row .who { gap: 8px; min-width: 0; }
+  .sleepers { display: flex; flex-wrap: wrap; align-items: end; gap: 4px 14px; margin-top: 8px; }
+  .sleepers figure { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 11px; color: var(--dim); }
+  .avt g, .podio-svg g { transform-box: fill-box; }
+  .star, .bolt, .bulb { animation: tw 1.4s steps(2) infinite; }
+  @keyframes tw { 50% { opacity: .35; } }
+  .zz1, .zz2 { animation: zz 2.4s steps(4) infinite; }
+  .zz2 { animation-delay: 1.2s; }
+  @keyframes zz { 0% { transform: translate(0, 2px); opacity: 0; } 30% { opacity: 1; } 100% { transform: translate(2px, -6px); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .avt *, .podio-svg *, .cursor { animation: none !important; } }
 </style>
 </head>
 <body>
@@ -148,6 +200,11 @@
       </div>
     </div>
 
+    <section class="podio" aria-labelledby="podio-title">
+      <h2 id="podio-title"><span>podio</span><span id="podio-label"></span></h2>
+      <div class="podio-scene"><div id="podio"></div><div class="plabels" id="plabels"></div></div>
+    </section>
+
     <div class="err" id="err"></div>
 
     <div class="grid">
@@ -171,11 +228,12 @@
   </div>
 </div>
 
+<script src="avatars/engine.js?v=2"></script>
+<script src="avatars/players.js?v=2"></script>
+<script src="config.js"></script>
 <script>
 // ── configuración: URL del proyecto y publishable/anon key de Supabase (solo lectura de las vistas) ──
-const SUPABASE_URL = "https://vprkqttohqzlmegilttw.supabase.co";
-const SUPABASE_KEY = "sb_publishable_yz1tdgMheLgUnIrglA5qsQ_XZQ2kvDm";
-const TZ = "America/Argentina/Buenos_Aires";
+const { SUPABASE_URL, SUPABASE_KEY, TZ } = window.CONFIG;    // config.js
 
 const MONTHS = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 const DOW = ["L","M","X","J","V"];
@@ -216,6 +274,7 @@ async function load() {
     if (SUPABASE_URL.includes("TU-PROYECTO")) throw new Error("Falta configurar SUPABASE_URL y SUPABASE_KEY en index.html");
     const [scores, players] = await Promise.all([api("public_scores", "&order=play_date.asc"), api("public_players")]);
     state.scores = scores; state.players = players.map(p => p.name);
+    await AV.cargar([...state.players, ...scores.map(s => s.name)].map(AV.spriteDe));
     err.style.display = "none";
     document.getElementById("m-sync").textContent = new Intl.DateTimeFormat("es-AR", { timeZone: TZ, hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date());
   } catch (e) {
@@ -225,6 +284,7 @@ async function load() {
 }
 
 // ── render ──
+const perfil = name => "perfil.html?n=" + encodeURIComponent(name);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const n = v => v.toLocaleString("es-AR");
 const mmss = s => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
@@ -244,6 +304,70 @@ function aggregate(from, to) {
   return rows;
 }
 
+// ── logros del día (corona, racha de victorias, más rápido, 100%, récord) ──
+// "Días de juego" = fechas en que jugó alguien, así fines de semana y feriados no cortan rachas.
+const AV = window.Avatares;
+
+function logros() {
+  const t = todayAR(), dow = parse(t).getUTCDay(), weekend = dow === 0 || dow === 6;
+  const byDay = new Map();
+  for (const s of state.scores) { if (!byDay.has(s.play_date)) byDay.set(s.play_date, []); byDay.get(s.play_date).push(s); }
+  const days = [...byDay.keys()].filter(d => d <= t).sort();
+  const winners = new Map([...byDay].map(([d, ss]) => { const m = Math.max(...ss.map(s => s.score)); return [d, new Set(ss.filter(s => s.score === m).map(s => s.name))]; }));
+  // fin de semana, o día hábil en que todavía no jugó nadie: se muestra el último día de juego
+  const ref = weekend || !byDay.has(t) ? (days[days.length - 1] ?? t) : t;
+  const jugaronHoy = new Set((byDay.get(t) || []).map(s => s.name));
+  const refScores = (byDay.get(ref) || []).slice().sort((a, b) => b.score - a.score || a.elapsed - b.elapsed);
+  const fast = refScores.filter(s => s.ok / s.total >= .8);
+  const minE = Math.min(...fast.map(s => s.elapsed));
+  const rapidos = new Set(fast.filter(s => s.elapsed === minE).map(s => s.name));
+  const best = Math.max(0, ...state.scores.map(s => s.score));
+  const record = new Set(state.scores.filter(s => best > 0 && s.score === best).map(s => s.name));
+  const back = days.filter(d => d <= ref).reverse();
+
+  // victorias seguidas: hoy cuenta solo si va primero; si no, se arranca desde el día de juego anterior
+  const racha = name => {
+    let i = back[0] === ref && !winners.get(ref)?.has(name) ? 1 : 0, n = 0;
+    for (; i < back.length && winners.get(back[i])?.has(name); i++) n++;
+    return n;
+  };
+  const estado = name => {
+    const s = refScores.find(x => x.name === name);
+    const r = racha(name);
+    const gano = !!s && winners.get(ref)?.has(name);
+    return {
+      racha: r,
+      corona: gano ? (r >= 4 ? "real" : r >= 2 ? "gemas" : "dorada") : undefined,
+      rapido: !!s && rapidos.has(name),
+      perfecto: !!s && s.ok === s.total,
+      basico: !!s && s.daily_seen,
+      record: record.has(name),
+      pendiente: !weekend && !jugaronHoy.has(name),
+    };
+  };
+  return { ref, today: t, weekend, top: refScores.slice(0, 4), estado };
+}
+
+function renderPodio(L) {
+  const medalla = ["", "plata", "bronce"];
+  document.getElementById("podio").innerHTML = AV.podioSVG([0, 1, 2, 3].map(i => {
+    const s = L.top[i];
+    if (!s) return null;
+    const e = L.estado(s.name);
+    return { nombre: s.name, estado: { ...e, pendiente: false, medalla: medalla[i] || undefined } };
+  }), { entrada: !renderPodio.yaEntro && L.top.length > 0 });
+  if (L.top.length) renderPodio.yaEntro = true;      // la caída al podio se ve una sola vez
+  const lab = i => {
+    const s = L.top[i];
+    return s ? `<div class="${i === 0 ? "first" : ""}"><b><a class="pl" href="${perfil(s.name)}">${esc(s.name)}</a>${s.daily_seen ? ' <span class="flag">*</span>' : ""}</b><span>${n(s.score)}</span></div>` : `<div><b class="muted">—</b><span></span></div>`;
+  };
+  document.getElementById("plabels").innerHTML = `<div></div>${lab(1)}${lab(0)}${lab(2)}<div></div>${lab(3)}<div></div>`;
+  const dn = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"][parse(L.ref).getUTCDay()];
+  const hoyVacio = !L.weekend && L.ref !== L.today;
+  document.getElementById("podio-label").textContent = !L.top.length ? "nadie jugó todavía"
+    : `${dn} ${shortDate(L.ref)}${hoyVacio ? " · hoy todavía no jugó nadie" : ""}`;
+}
+
 function render() {
   document.querySelectorAll("nav button").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === state.view));
   const { from, to, label } = periodRange();
@@ -252,6 +376,8 @@ function render() {
   document.getElementById("next").disabled = state.view === "all" || state.offset >= 0;
   document.getElementById("prev").disabled = state.view === "all";
 
+  const L = logros();
+  renderPodio(L);
   const rows = aggregate(from, to);
   const max = Math.max(1, ...rows.map(r => r.total));
   const days = state.view === "week" ? [0, 1, 2, 3, 4].map(i => addDays(from, i)) : [];
@@ -265,7 +391,12 @@ function render() {
     const zero = r.days === 0;
     html += `<tr class="${r.rank === 1 && !zero ? "p1" : ""}${zero ? " zero" : ""}">
       <td class="rank">${zero ? "–" : String(r.rank).padStart(2, "0")}</td>
-      <td class="name">${esc(r.name)}${r.flagged ? ' <span class="flag">*</span>' : ""}</td>
+      <td class="name"><div class="who">${(() => {
+        const e = L.estado(r.name);
+        return AV.avatar(r.name, e, { recorte: "busto", alto: 44 }) +
+          `<a class="pl" href="${perfil(r.name)}"><span class="nm">${esc(r.name)}</span></a>${r.flagged ? '<span class="flag">*</span>' : ""}` +
+          AV.rachaSVG(e.racha, 16) + (e.record ? `<span title="récord histórico">${AV.iconoSVG("trofeo", 14)}</span>` : "");
+      })()}</div></td>
       <td class="num pts">${n(r.total)}</td>
       <td class="spark"><div class="meter"><i style="width:${(r.total / max * 100).toFixed(1)}%"></i></div></td>
       ${days.map(d => {
@@ -291,8 +422,8 @@ function render() {
   let th = "";
   if (dow === 0 || dow === 6) th = `<div class="muted">fin de semana · no suma</div>`;
   else if (!today.length) th = `<div class="muted">nadie jugó todavía</div>`;
-  th += today.map((s, i) => `<div class="row${i === 0 ? " first" : ""}"><span class="n">${esc(s.name)}${s.daily_seen ? ' <span class="flag">*</span>' : ""}</span><span class="v">${n(s.score)}</span></div>`).join("");
-  if (today.length && pending.length && dow % 6) th += `<div class="sep"></div><div class="muted">faltan: ${pending.map(esc).join(", ")}</div>`;
+  th += today.map((s, i) => `<div class="row${i === 0 ? " first" : ""}"><span class="n who">${AV.avatar(s.name, L.estado(s.name), { recorte: "busto", alto: 28 })}<a class="pl" href="${perfil(s.name)}"><span>${esc(s.name)}</span></a>${s.daily_seen ? ' <span class="flag">*</span>' : ""}</span><span class="v">${n(s.score)}</span></div>`).join("");
+  if (pending.length && dow % 6) th += `${today.length ? '<div class="sep"></div>' : ""}<div class="muted">faltan:</div><div class="sleepers">${pending.map(p => `<figure>${AV.avatar(p, { pendiente: true }, { pose: "sentado", alto: 40 })}<figcaption><a class="pl" href="${perfil(p)}"><span>${esc(p)}</span></a></figcaption></figure>`).join("")}</div>`;
   document.getElementById("today").innerHTML = th;
 
   // récords
