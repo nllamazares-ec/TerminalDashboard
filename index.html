@@ -103,6 +103,9 @@
   td.day { text-align: right; color: var(--mid); font-size: 12.5px; }
   td.day.none { color: var(--line); }
   td.day.top { color: var(--acc); }
+  td.day.void, th.void { color: var(--dim); text-decoration: line-through; text-decoration-color: var(--line); }
+  td.day.void.top { color: var(--dim); }
+  .period small { color: var(--dim); font-size: 11.5px; margin-left: 6px; }
   td.stat { color: var(--mid); }
   tr.zero td { color: var(--dim) !important; }
   tr.zero .meter i { width: 0 !important; }
@@ -243,7 +246,7 @@
     </div>
 
     <footer>
-      <div><span class="flag">*</span> abrió el básico del día antes del hardcore</div>
+      <div><span class="flag">*</span> abrió el básico del día antes del hardcore · <s>tachado</s> = faltó alguien, ese día no suma</div>
       <div><kbd>s</kbd> <kbd>m</kbd> <kbd>t</kbd> vista · <kbd>←</kbd> <kbd>→</kbd> período · refresco cada 60 s</div>
     </footer>
   </div>
@@ -311,14 +314,20 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;",
 const n = v => v.toLocaleString("es-AR");
 const mmss = s => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
+// Días que suman para semana/mes/total: ver Logros.diasValidos (avatars/logros.js).
+const countingDays = () => Logros.diasValidos(state.scores, state.players);
+
 function aggregate(from, to) {
+  const valid = countingDays();
   const by = new Map(state.players.map(p => [p, { name: p, total: 0, days: 0, best: 0, perDay: {}, flagged: false }]));
   for (const s of state.scores) {
     if (s.play_date < from || s.play_date > to) continue;
     if (!by.has(s.name)) by.set(s.name, { name: s.name, total: 0, days: 0, best: 0, perDay: {}, flagged: false });
     const a = by.get(s.name);
+    a.perDay[s.play_date] = s;          // la grilla diaria muestra todo
+    if (!valid.has(s.play_date)) continue;
     a.total += s.score; a.days++; a.best = Math.max(a.best, s.score);
-    a.perDay[s.play_date] = s; a.flagged ||= s.daily_seen;
+    a.flagged ||= s.daily_seen;
   }
   const rows = [...by.values()].sort((a, b) => b.total - a.total || b.best - a.best || a.name.localeCompare(b.name));
   let rank = 0, prev = null;
@@ -399,15 +408,22 @@ function render() {
   document.getElementById("prev").disabled = state.view === "all";
 
   const L = logros();
-  const LG = Logros.calcular(state.scores, todayAR());
+  const LG = Logros.calcular(state.scores, todayAR(), state.players);
   renderPodio(L);
   const rows = aggregate(from, to);
+  const valid = countingDays();
+  const played = new Set(state.scores.filter(s => s.play_date >= from && s.play_date <= to).map(s => s.play_date));
+  const t0 = todayAR();
+  const todayOpen = played.has(t0) && !valid.has(t0);           // hoy todavía falta alguien: puede sumar más tarde
+  const nValid = [...played].filter(d => valid.has(d)).length;
+  document.getElementById("period").innerHTML = `${esc(label)}<small>${nValid}/${played.size - (todayOpen ? 1 : 0)} días suman${todayOpen ? " · hoy en curso" : ""}</small>`;
   const max = Math.max(1, ...rows.map(r => r.total));
   const days = state.view === "week" ? [0, 1, 2, 3, 4].map(i => addDays(from, i)) : [];
   const topOfDay = Object.fromEntries(days.map(d => [d, Math.max(0, ...rows.map(r => r.perDay[d]?.score ?? 0))]));
 
   let html = `<thead><tr><th>#</th><th>jugador</th><th class="num">pts</th><th></th>`;
-  html += days.map((d, i) => `<th class="num">${DOW[i]} ${parse(d).getUTCDate()}</th>`).join("");
+  const isVoid = d => played.has(d) && !valid.has(d) && d !== t0;
+  html += days.map((d, i) => `<th class="num${isVoid(d) ? " void" : ""}"${isVoid(d) ? ' title="faltó alguien: no suma"' : ""}>${DOW[i]} ${parse(d).getUTCDate()}</th>`).join("");
   html += `<th class="num">días</th><th class="num">prom</th><th class="num">mejor</th></tr></thead><tbody>`;
   if (!rows.length) html += `<tr><td colspan="${7 + days.length}" class="muted">sin jugadores todavía</td></tr>`;
   for (const r of rows) {
@@ -426,7 +442,7 @@ function render() {
         const s = r.perDay[d];
         if (!s) return `<td class="day none">${d > todayAR() ? "" : "·"}</td>`;
         const top = s.score === topOfDay[d] && s.score > 0;
-        return `<td class="day${top ? " top" : ""}" title="${s.ok}/${s.total} palabras · ${mmss(s.elapsed)}">${n(s.score)}${s.daily_seen ? '<span class="flag">*</span>' : ""}</td>`;
+        return `<td class="day${top ? " top" : ""}${isVoid(d) ? " void" : ""}" title="${s.ok}/${s.total} palabras · ${mmss(s.elapsed)}${isVoid(d) ? " · no suma" : ""}">${n(s.score)}${s.daily_seen ? '<span class="flag">*</span>' : ""}</td>`;
       }).join("")}
       <td class="num stat">${r.days}</td>
       <td class="num stat">${zero ? "–" : n(Math.round(r.total / r.days))}</td>

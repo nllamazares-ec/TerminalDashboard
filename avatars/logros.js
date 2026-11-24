@@ -32,10 +32,27 @@
   const addDays = (s, n) => { const d = parse(s); d.setUTCDate(d.getUTCDate() + n); return fmt(d); };
   const lunes = s => addDays(s, -((parse(s).getUTCDay() + 6) % 7));
 
+  // ───────────────────────── días que suman ─────────────────────────
+  // Un día suma para los rankings (semana/mes/total y "ganador de la semana") solo si jugaron todos
+  // los jugadores activos que ya habían arrancado (primera partida ese día o antes). Así sumar a alguien
+  // nuevo no anula el historial. Si alguien deja de jugar: update players set active = false where name = '...';
+  function diasValidos(scores, jugadores) {
+    const primera = new Map(), porDia = new Map();
+    for (const s of scores) {
+      if (!primera.has(s.name) || s.play_date < primera.get(s.name)) primera.set(s.name, s.play_date);
+      if (!porDia.has(s.play_date)) porDia.set(s.play_date, new Set());
+      porDia.get(s.play_date).add(s.name);
+    }
+    const ok = new Set();
+    for (const [d, quienes] of porDia)
+      if (jugadores.every(p => !primera.has(p) || primera.get(p) > d || quienes.has(p))) ok.add(d);
+    return ok;
+  }
+
   // ───────────────────────── cálculo ─────────────────────────
-  // scores: filas de public_scores · hoy: "YYYY-MM-DD"
+  // scores: filas de public_scores · hoy: "YYYY-MM-DD" · jugadores: nombres activos (para los días que suman)
   // → { de: { nombre: { id: { veces, primera, ultima } } }, eventos: [{ name, id, fecha }] (más nuevo primero) }
-  function calcular(scores, hoy) {
+  function calcular(scores, hoy, jugadores) {
     const de = {}, eventos = [];
     const add = (name, id, fecha) => {
       const m = de[name] || (de[name] = {});
@@ -89,6 +106,7 @@
       semanas.get(l).push(s);
     }
     const lunesHoy = lunes(hoy);
+    const suma = jugadores ? diasValidos(validos, jugadores) : null;
     for (const [l, ss] of [...semanas].sort()) {
       const viernes = addDays(l, 4);
       const diasDe = {};
@@ -96,8 +114,8 @@
       for (const [name, set] of Object.entries(diasDe)) if (set.size >= 5) add(name, "constante", viernes);
       if (l < lunesHoy) {
         const tot = {};
-        for (const s of ss) tot[s.name] = (tot[s.name] || 0) + s.score;
-        const max = Math.max(...Object.values(tot));
+        for (const s of ss) if (!suma || suma.has(s.play_date)) tot[s.name] = (tot[s.name] || 0) + s.score;
+        const max = Math.max(0, ...Object.values(tot));
         if (max > 0) for (const [name, t] of Object.entries(tot)) if (t === max) add(name, "semana", viernes);
       }
     }
@@ -181,5 +199,5 @@
     return `<span class="medalla${bloqueada ? " bloq" : ""}"${tit}>${svg}</span>`;
   }
 
-  global.Logros = { DEFS, POR_ID, calcular, ordenadas, medalla, cargar };
+  global.Logros = { DEFS, POR_ID, calcular, diasValidos, ordenadas, medalla, cargar };
 })(typeof window !== "undefined" ? window : globalThis);

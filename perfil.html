@@ -227,7 +227,7 @@ function render(scores, players) {
     row("más rápido 100%", st.fastest ? mmss(st.fastest.elapsed) : "—");
 
   // medallero: todas las medallas, las ganadas a color (con cuántas veces y desde cuándo) y el resto en gris
-  const LG = Logros.calcular(scores, todayAR()), mias = LG.de[nombre] || {};
+  const LG = Logros.calcular(scores, todayAR(), players), mias = LG.de[nombre] || {};
   $("med-count").textContent = `${Object.keys(mias).length} de ${Logros.DEFS.length}`;
   $("medallero").innerHTML = Logros.DEFS.map(d => {
     const r = mias[d.id];
